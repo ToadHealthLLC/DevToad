@@ -1,0 +1,25 @@
+projected workflow:
+    - run "devtoad $dir" to spin up an instance in a project dir
+        - somehow the devtoad package needs to get your api key info
+    - this will start up a cli
+        - under the hood, the directory tree will be mapped
+        - file summarization api calls (and function summarization)
+            - structured llm calls (openai)
+            - might want to store this somewhere so limit spending
+        - overall project tree prompt built
+    - ask it stuff
+        - should be an easy way to ask questions about specific files + dirs under the working dir
+        - smaller scope tree prompt pruned out of larger prompt based on what is specified
+        - llm system prompt + user query appended to the tree structure prompt
+    - a ToadAgent instance created
+        - receives the llm prompt
+        - quick api call to check if the user query requires structured or unstructured response
+            - this will be used to call the appropriate function later
+        - makes the llm request with the prompt
+            - llm request should return a list of relevant files to answer the user query
+            - the content of these files are then loaded into a new prompt with the llm system prompt and user query
+    - the ToadAgent sends the query with the relevant file content to an llm
+        - with a new prompt to generate code diffs (may need structured output)
+        - receive the code diffs   
+            - stash old changes (git???)
+            - apply code diffs
